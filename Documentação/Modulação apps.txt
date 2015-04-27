@@ -1,0 +1,35 @@
+Para fazer a modulação é bem simples
+
+1º Criar o app
+	- no cmd, vá para a pasta onde se encontra o manage.py e digite o comando 
+		"manage.py startapp <nome_do_app>"
+
+2º Altere o mysite/settings.py
+	- procure por installed apps e adicione o nome do seu app. Ex:
+
+INSTALLED_APPS = (
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    '<nome_do_app>',
+)
+
+3º Altere o nomedoapp/admin.py
+	- Se não fizer isso, na pagina do admin, voce nao consegue mexer nas tabelas das nodels do app
+	- Porcure pela pasta <nome_do_app>/admin.py e adicione as seguintes linhas:
+		"from django.contrib import admin
+		admin.site.register(<nome_da_model>)"
+	- Faça isso para cada model adicionada no app
+
+4º urls.py
+	- Crie o urls.py na pasta do app e adicione o que for necessário
+	- Vá para a mysite/urls.py do projeto e adicione no urlpatterns "url(r'^<nome_do_app(o que vc quiser, na vdd)>/', include('<nome_do_app>.urls'))". Ex:
+
+urlpatterns = patterns('',
+    url(r'^<nome_do_app(o que vc quiser, na vdd)>/', include('<nome_do_app>.urls')),
+)
+
+5º namespaces ?? https://docs.djangoproject.com/en/1.7/intro/tutorial03/#namespacing-url-names

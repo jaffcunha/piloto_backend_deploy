@@ -1,0 +1,22 @@
+Criando multiplos views:
+
+Não há nada de especial em criar várias views
+Você pode simplesmente criar a view e chamar normalmente na url:
+
+urls = patterns('',
+    (r'url1', 'app.views1.my_view1'),
+    (r'url2', 'app.views2.my_view2')
+    ...
+
+ou
+
+from app import views1, views2
+urls = patterns('',
+    (r'url1', views1.my_view1),
+    (r'url2', views2.my_view2)
+    ...
+
+Ou você pode criar uma pasta chamada views e colocar as views lá dentro. Neste caso, é necessário criar um arquivo de nome __init__.py e preeche-lo da seguinte maneira:
+
+from viewsa import *
+from viewsb import *

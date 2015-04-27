@@ -1,0 +1,318 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1343\cocoasubrtf160
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\froman\fcharset0 Times-Roman;}
+{\colortbl;\red255\green255\blue255;\red15\green112\blue1;\red246\green246\blue246;\red14\green60\blue38;
+\red0\green0\blue255;\red83\green83\blue83;\red169\green14\blue26;\red171\green79\blue117;\red151\green0\blue255;
+}
+\paperw11900\paperh16840\margl1440\margr1440\vieww21880\viewh7280\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\f0\fs24 \cf0 Documenta\'e7\'e3o Custom Lookup Django 1.7\
+\
+Primeiramente devemos saber o que \'e9 um Custom Lookup e para que ele serve.\
+\
+O Custom Lookup \'e9 uma ferramenta do Django que permite filtrar, de in\'fameras formas, o banco de dados, por meio dos QuerySets que s\'e3o cole\'e7\'f5es de objetos no banco de dados. Mais detalhes sobre QuerySets em sua documenta\'e7\'e3o.\
+\
+Essa ferramenta ser\'e1 bastante utilizada para podermos tornar o SI mais eficiente, mais r\'e1pido, uma vez que ela seleciona parte do banco de dados para ser analisada ao inv\'e9s de utilizar todo ele como era feito.\
+\
+Como era feito: \'93[\'85].objects.all(campo=\'93valor\'94)\'94\
+\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\b \cf0 **
+\b0  Obs: ser\'e1 utilizado o comando [\'85] para se referir a uma 
+\b classe 
+\b0 qualquer, para n\'e3o alienar com algum exemplo espec\'edfico.\
+\
+\
+Depois de um brev\'edssimo resumo, est\'e1 na hora de saber como usar tal ferramenta.\
+\
+Vamos, ent\'e3o, entender como se usa um lookup j\'e1 pronto, o \'93exact\'94.\
+\
+Quando queremos filtrar um objeto, por exemplo, uma pessoa pelo nome, utilizamos:\
+\
+\'93[\'85].objects.filter(nome=\'91Jo\'e3o\'92)\'94\
+\
+Est\'e1 impl\'edcito, como padr\'e3o, que o Django ir\'e1 buscar todos os nomes que est\'e3o escritos da mesma maneira como foi colocado, o \'93J\'94 com letra mai\'fascula, e o \'93\'e3\'94 com o tio.\
+\
+Ou seja, de uma forma completa, esse c\'f3digo estaria escrito dessa forma:\
+\
+\
+\'93[\'85].objects.filter(nome__exact=\'91Jo\'e3o\'92)\'94\
+\
+\
+Essa sintaxe prov\'e9m de um c\'f3digo padr\'e3o/geral do tipo:\
+\
+\
+
+\b \'93[\'85].objects.filter(campo__tipodolookup=\'91valorcomparado\'92)\'94
+\b0 \
+\
+\
+S\'e3o utilizados dois \'93underlines\'94 para denominar o tipo do lookup. Isso faz com que 
+\b n\'e3o
+\b0  seja poss\'edvel utilizar o mesmo c\'f3digo (dois underlines) para dar nome ao lookup. \
+\
+\
+Exemplo: \'93[\'85].objects.filter(nome__
+\b \'94nao__pode\'94
+\b0 =x).\
+\
+\
+Outro lookup que j\'e1 est\'e1 pronto e tamb\'e9m \'e9 muito utilizado \'e9 o \'93iexact\'94. Ele ignora as letras mai\'fasculas, min\'fasculas e acentua\'e7\'f5es, tornando mais ampla a busca.\
+\
+Agora, finalmente, para criar o pr\'f3prio lookup, precisamos realizar dois passos importantes: 
+\b implementar
+\b0  
+\b o lookup e
+\b0  
+\b \'93avisar\'94 (registrar) o Django sobre ele
+\b0 .\
+\
+Para a 
+\b \ul primeira parte
+\b0 \ulnone , usamos o seguinte c\'f3digo de implementa\'e7\'e3o:\
+\
+\pard\pardeftab720
+
+\f1\fs28 \cf2 \cb3 \expnd0\expndtw0\kerning0
+from\cf4 \expnd0\expndtw0\kerning0
+ \cf5 \expnd0\expndtw0\kerning0
+django.db.models\cf4 \expnd0\expndtw0\kerning0
+ \cf2 \expnd0\expndtw0\kerning0
+import\cf4 \expnd0\expndtw0\kerning0
+ Lookup\
+\
+\cf2 \expnd0\expndtw0\kerning0
+class\cf4 \expnd0\expndtw0\kerning0
+ \cf5 \expnd0\expndtw0\kerning0
+Funcao\cf4 \expnd0\expndtw0\kerning0
+(Lookup):\
+    lookup_name \cf6 \expnd0\expndtw0\kerning0
+=\cf4 \expnd0\expndtw0\kerning0
+ \cf7 \expnd0\expndtw0\kerning0
+\'91func\'92\cf4 \expnd0\expndtw0\kerning0
+\
+\
+    \cf2 \expnd0\expndtw0\kerning0
+def\cf4 \expnd0\expndtw0\kerning0
+ \cf5 \expnd0\expndtw0\kerning0
+as_sql\cf4 \expnd0\expndtw0\kerning0
+(\cf2 \expnd0\expndtw0\kerning0
+self\cf4 \expnd0\expndtw0\kerning0
+, qn, connection):\
+        lhs, lhs_params \cf6 \expnd0\expndtw0\kerning0
+=\cf4 \expnd0\expndtw0\kerning0
+ \cf2 \expnd0\expndtw0\kerning0
+self\cf6 \expnd0\expndtw0\kerning0
+.\cf4 \expnd0\expndtw0\kerning0
+process_lhs(qn, connection)\
+        rhs, rhs_params \cf6 \expnd0\expndtw0\kerning0
+=\cf4 \expnd0\expndtw0\kerning0
+ \cf2 \expnd0\expndtw0\kerning0
+self\cf6 \expnd0\expndtw0\kerning0
+.\cf4 \expnd0\expndtw0\kerning0
+process_rhs(qn, connection)\
+        params \cf6 \expnd0\expndtw0\kerning0
+=\cf4 \expnd0\expndtw0\kerning0
+ lhs_params \cf6 \expnd0\expndtw0\kerning0
++\cf4 \expnd0\expndtw0\kerning0
+ rhs_params\
+        \cf2 \expnd0\expndtw0\kerning0
+return\cf4 \expnd0\expndtw0\kerning0
+ \cf7 \expnd0\expndtw0\kerning0
+'\cf8 \expnd0\expndtw0\kerning0
+%s\cf7 \expnd0\expndtw0\kerning0
+ <> \cf8 \expnd0\expndtw0\kerning0
+%s\cf7 \expnd0\expndtw0\kerning0
+'\cf4 \expnd0\expndtw0\kerning0
+ \cf6 \expnd0\expndtw0\kerning0
+%\cf4 \expnd0\expndtw0\kerning0
+ (lhs, rhs), params
+\f0\fs24 \cf0 \cb1 \kerning1\expnd0\expndtw0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 \
+Mas afinal, o que est\'e1 acontecendo nesse c\'f3digo?\
+\
+Simples. O c\'f3digo importa o m\'e9todo Lookup da models padr\'e3o do Django e cria a classe desejada. Seguindo os costumes, o nome da classe se inicia com letra mai\'fascula (\'93Funcao\'94). Em \'93lookup_name = \'91func\'92\'93 estamos definindo como o lookup em quest\'e3o ser\'e1 chamado. Nesse caso, quando quisermos utilizar o lookup \'93Funcao\'94, iremos escrever algo do tipo \'93[\'85].objects.filter(camp
+\b __func
+\b0 =\'91valorcomparado\'92\'94. Utilizaremos \'93camp\'94 somente para maior did\'e1tica.\
+\
+Por fim, iremos definir qual parte do banco de dados iremos limitar a busca. Para isso iremos definir um m\'e9todo j\'e1 \'93pronto\'94: 
+\b as_sql
+\b0 . \ul Esse m\'e9todo chama o par\'e2metro 
+\b qn
+\b0 , que est\'e1 relacionado ao SQLCompiler object, um compilador, e o par\'e2metro connection que ativa a conex\'e3o com o banco de dados.(?)\ulnone \
+\
+Sabendo isso, \'e9 necess\'e1rio entender agora como o lookup funciona. Ele trabalha em cima de dois valores: 
+\b lhs
+\b0  e 
+\b rhs
+\b0  (a saber: left-hand side e right-hand side). O rhs \'e9 o valor dado pelo usu\'e1rio; no exemplo dado dois par\'e1grafos acima, o rhs seria \'93valorcomparado\'94. J\'e1 o lhs \'e9 o campo a ser comparado; no mesmo exemplo, o lhs seria \'93camp\'94.\
+\
+Esse processo serve para limitar o banco de dados a ser pesquisado. Ao inv\'e9s de procurar o que se deseja em todo o banco de dados, passaremos a procur\'e1-lo somente no campo desejado \'93camp\'94, tornando a busca mais eficiente.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 \ul \ulc0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 \ulnone Agora, para 
+\b \ul segunda parte
+\b0 \ulnone , iremos \'93avisar\'94 (registrar) o Djando sobre a implementa\'e7\'e3o da seguinte maneira:\
+\
+\pard\pardeftab720
+
+\f1\fs28 \cf2 \cb3 \expnd0\expndtw0\kerning0
+from\cf4 \expnd0\expndtw0\kerning0
+ \cf5 \expnd0\expndtw0\kerning0
+django.db.models.fields\cf4 \expnd0\expndtw0\kerning0
+ \cf2 \expnd0\expndtw0\kerning0
+import\cf4 \expnd0\expndtw0\kerning0
+ Field\
+#c\'f3digo\
+Field\cf6 \expnd0\expndtw0\kerning0
+.\cf4 \expnd0\expndtw0\kerning0
+register_lookup(Funcao)\
+
+\f0\fs24 \cf0 \cb1 \kerning1\expnd0\expndtw0 \
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 Note que utilizamos a subclasse 
+\b Field
+\b0 , pois no exemplo anterior \'e9 a que faz mais sentido ser utilizada. Contudo, podemos utilizar outros tipos de subclasses como IntegerField, FloatField, etc.\ul \
+\
+\
+\ulnone Al\'e9m do que foi dito, o Custom Lookup possui algumas funcionalidades a mais. Como assim? Quais s\'e3o elas?\
+\
+Basicamente ele permite o usu\'e1rio utilizar uma composi\'e7\'e3o de lookups, ou seja, utilizar dois ou mais lookups juntos numa mesma busca. Para isso s\'e3o utilizadas as 
+\b transforma\'e7\'f5es
+\b0 .\
+\
+Por exemplo, vamos escrever um lookup que ir\'e1 nos dizer se a varia\'e7\'e3o de um experimento qualquer foi igual ou menor que 27. A model \'93
+\b Experiment
+\b0 \'94
+\b  
+\b0 possui os atributos do valor inicial, do valor final e da varia\'e7\'e3o. Iremos tamb\'e9m chamar o lookup de 
+\b abs
+\b0  (vem de valor absoluto). Primeiramente, queremos implementar o lookup, mas como ser\'e1 uma transforma\'e7\'e3o, ele ser\'e1 implementado da seguinte maneira:\
+\
+\pard\pardeftab720
+
+\f1\fs28 \cf2 \cb3 \expnd0\expndtw0\kerning0
+from\cf4 \expnd0\expndtw0\kerning0
+ \cf5 \expnd0\expndtw0\kerning0
+django.db.models\cf4 \expnd0\expndtw0\kerning0
+ \cf2 \expnd0\expndtw0\kerning0
+import\cf4 \expnd0\expndtw0\kerning0
+ Transform\
+\
+\cf2 \expnd0\expndtw0\kerning0
+class\cf4 \expnd0\expndtw0\kerning0
+ \cf5 \expnd0\expndtw0\kerning0
+AbsoluteValue\cf4 \expnd0\expndtw0\kerning0
+(Transform):\
+    lookup_name \cf6 \expnd0\expndtw0\kerning0
+=\cf4 \expnd0\expndtw0\kerning0
+ \cf7 \expnd0\expndtw0\kerning0
+'abs'\cf4 \expnd0\expndtw0\kerning0
+\
+\
+    \cf2 \expnd0\expndtw0\kerning0
+def\cf4 \expnd0\expndtw0\kerning0
+ \cf5 \expnd0\expndtw0\kerning0
+as_sql\cf4 \expnd0\expndtw0\kerning0
+(\cf2 \expnd0\expndtw0\kerning0
+self\cf4 \expnd0\expndtw0\kerning0
+, qn, connection):\
+        lhs, params \cf6 \expnd0\expndtw0\kerning0
+=\cf4 \expnd0\expndtw0\kerning0
+ qn\cf6 \expnd0\expndtw0\kerning0
+.\cf4 \expnd0\expndtw0\kerning0
+compile(\cf2 \expnd0\expndtw0\kerning0
+self\cf6 \expnd0\expndtw0\kerning0
+.\cf4 \expnd0\expndtw0\kerning0
+lhs)\
+        \cf2 \expnd0\expndtw0\kerning0
+return\cf4 \expnd0\expndtw0\kerning0
+ \cf7 \expnd0\expndtw0\kerning0
+"ABS(\cf8 \expnd0\expndtw0\kerning0
+%s\cf7 \expnd0\expndtw0\kerning0
+)"\cf4 \expnd0\expndtw0\kerning0
+ \cf6 \expnd0\expndtw0\kerning0
+%\cf4 \expnd0\expndtw0\kerning0
+ lhs, params\
+
+\f0\fs24 \cf0 \cb1 \kerning1\expnd0\expndtw0 \
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\b \cf0 * Note
+\b0  
+\b que na importa\'e7\'e3o agora n\'e3o usamos mais \'93Lookup\'94 e sim \'93Transform\'94.\
+\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\b0 \cf0 Esse lookup est\'e1 retornando \'93ABS(%s)\'94. \'c9 o uso de uma fun\'e7\'e3o j\'e1 existente no Django para converter o valor obtido para absoluto a fim de poder fazer a compara\'e7\'e3o.\
+\
+Agora iremos \'93avisar\'94 (registrar) o Django sobre a implementa\'e7\'e3o:\
+\
+\pard\pardeftab720
+
+\f1\fs28 \cf2 \cb3 \expnd0\expndtw0\kerning0
+from\cf4 \expnd0\expndtw0\kerning0
+ \cf5 \expnd0\expndtw0\kerning0
+django.db.models\cf4 \expnd0\expndtw0\kerning0
+ \cf2 \expnd0\expndtw0\kerning0
+import\cf4 \expnd0\expndtw0\kerning0
+ IntegerField\
+IntegerField\cf6 \expnd0\expndtw0\kerning0
+.\cf4 \expnd0\expndtw0\kerning0
+register_lookup(AbsoluteValue)\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\f0\fs24 \cf0 \cb1 \kerning1\expnd0\expndtw0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\b \cf0 * Note que nesse caso usamos o IntegerField pois sabemos que iremos registrar um valor inteiro.\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\b0 \cf0 Dessa maneira, j\'e1 podemos utilizar o c\'f3digo \'93Experiment.objects.filter(variacao__abs=27)\'94 que ir\'e1 nos retornar os experimentos que possuem varia\'e7\'e3o igual a 27. Contudo, queremos igual 
+\b ou menor
+\b0  que 27. Logo, iremos utilizar um lookup j\'e1 existente para dizer que tamb\'e9m estamos interessados nos valores menores que 27. Esse lookup \'e9 chamado da seguinte maneira: __lt.\
+\
+O c\'f3digo para poder fazer a busca ficaria \'93Experiment.objects.filter(variacao__abs__lt=27) que ir\'e1 nos retornar os experimentos que possuem varia\'e7\'e3o igual ou menor que 27.\
+\
+\'c9 poss\'edvel tamb\'e9m mudar o return da transforma\'e7\'e3o feita. Como assim? Por exemplo, caso o experimento esteja num campo que necessite de um FloatField (Experimento 2.1.2), \'e9 poss\'edvel obter um return em FloatField, mesmo que trabalhemos anteriormente com um IntegerField utilizando um \'93
+\b output_field
+\b0 \'94. Como?\
+\
+Colocando o seguinte c\'f3digo abaixo do primeiro return, mas ainda dentro da classe AbsoluteValue:\
+\
+\pard\pardeftab720
+
+\f1\fs28 \cf4 \cb3 \expnd0\expndtw0\kerning0
+    \cf9 \expnd0\expndtw0\kerning0
+@property\cf4 \expnd0\expndtw0\kerning0
+\
+    \cf2 \expnd0\expndtw0\kerning0
+def\cf4 \expnd0\expndtw0\kerning0
+ \cf5 \expnd0\expndtw0\kerning0
+output_field\cf4 \expnd0\expndtw0\kerning0
+(\cf2 \expnd0\expndtw0\kerning0
+self\cf4 \expnd0\expndtw0\kerning0
+):\
+        \cf2 \expnd0\expndtw0\kerning0
+return\cf4 \expnd0\expndtw0\kerning0
+ FloatField()
+\f0\fs24 \cf0 \cb1 \kerning1\expnd0\expndtw0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 \
+O b\'e1sico do Custom Lookup \'e9 isso, utilizando essa ferramenta o SI provavelmente ser\'e1 muito mais eficiente.\
+\
+Para aprofundar ainda mais o conhecimento sobre Custom Lookups ou ent\'e3o ler uma documenta\'e7\'e3o mais detalhada, segue alguns links de interesse:\
+\
+- https://docs.djangoproject.com/en/1.7/howto/custom-lookups/   (Documenta\'e7\'e3o do Custom Lookup pelo pr\'f3prio Django)\
+- https://docs.djangoproject.com/en/1.7/ref/models/lookups/   (Documenta\'e7\'e3o das refer\'eancias utilizadas para registrar o lookup e as transforma\'e7\'f5es)\
+- https://docs.djangoproject.com/en/1.7/topics/db/queries/   (Sobre o uso da ferramenta de filtrar utilizando o lookup)\
+\
+}

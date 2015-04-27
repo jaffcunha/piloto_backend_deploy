@@ -1,0 +1,21 @@
+﻿Documentação Start Project Django 1.7
+
+Para se iniciar um projeto, primeiramente é necessário ter todos os programas necessários instalados.
+
+Abra o terminal e digite “django-admin.py startproject nome_do_projeto”.
+
+Com isso, será criada uma pasta (no meu caso em ‘gtufaile’) com todos os arquivos iniciais:
+
+nome_do_projeto/
+    		manage.py
+    		nome_do_projeto/
+       		 		__init__.py
+       				 settings.py
+       				 urls.py
+       				 wsgi.py
+
+Transfira a pasta para o local desejado.
+
+Depois, pelo terminal com os comandos “cd” ou “ls” encontre o local que está salva a pasta criada com o comando anterior e digite “python manage.py migrate”.
+
+Isso fará com que o banco de dados seja criado. Logo, irá aparecer na pasta do projeto um novo arquivo chamado “db.sqlite3”.

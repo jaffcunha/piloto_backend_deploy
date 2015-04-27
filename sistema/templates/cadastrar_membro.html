@@ -1,0 +1,40 @@
+{% extends "Base.html" %}
+
+{% block title %} Cadastro de pessoa {% endblock title%}
+
+{% block content %}
+
+<div class="widget green">
+                        <div class="widget-title">
+                            <h4><i class="icon-reorder"></i> Cadastrar Pessoa </h4>
+                            <span class="tools">
+                            <a href="javascript:;" class="icon-chevron-down"></a>
+                            <a href="javascript:;" class="icon-remove"></a>
+                            </span>
+                        </div>
+                        <div class="widget-body">
+                            <!-- BEGIN FORM-->
+                            {%if sucesso%}
+                        	    <a align="center"><h4><font color="blue">Pessoa cadastrada com sucesso!</font></h4></a>
+                        	{%endif%}
+                        	{%if dados_incorretos%}
+                                <a align="center"><h4><font color="red">Preencha corretamente o cadastro.</font></h4></a>
+                        	{%endif%}	
+                            <br>
+                            <form action="" class="form-horizontal" method='post'> {% csrf_token %}
+                                {% for campo in pessoa_form %}
+                                <div class="control-group">
+                                    <label class="control-label">{{campo.label}}</label>
+                                    <div class="controls">
+                                        {{campo}}
+                                        <!--input type="text" placeholder=".input-large" class="input-large">
+                                        <span class="help-inline">Some hint here</span-->
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                <button class="btn  btn-success" type="submit">Cadastrar</button>
+                            <!-- END FORM-->
+                        </div>
+                    </div>
+
+{% endblock content %}

@@ -1,0 +1,50 @@
+{% extends "Base.html" %}
+
+{% block title %} Edição de cadastro {% endblock title%}
+
+{% block content %}
+
+<div class="widget purple">
+                         <div class="widget-title">
+                             <h4><i class="icon-reorder"></i> Visualizar Pessoas </h4>
+                            <span class="tools">
+                                <a href="javascript:;" class="icon-chevron-down"></a>
+                                <a href="javascript:;" class="icon-remove"></a>
+                            </span>
+                         </div>
+                         <div class="widget-body">
+                             <div>
+                                 <div class="clearfix">
+                                     <div class="btn-group">
+                                         <button id="editable-sample_new" class="btn green">
+                                             Cadastrar nova pessoa <i class="icon-plus"></i>
+                                         </button>
+                                     </div>
+                                     <div class="btn-group pull-right">
+                                         <button class="btn dropdown-toggle" data-toggle="dropdown">Tools <i class="icon-angle-down"></i>
+                                         </button>
+                                     </div>
+                                 </div>
+                                 <div class="space15"></div>
+                                 <div id="editable-sample_wrapper" class="dataTables_wrapper form-inline" role="grid"><div class="row-fluid"><div class="span6"><div id="editable-sample_length" class="dataTables_length"><label><select size="1" name="editable-sample_length" aria-controls="editable-sample" class="xsmall"><option value="5" selected="selected">5</option><option value="15">15</option><option value="20">20</option><option value="-1">All</option></select> cadastros por página</label></div></div><div class="span6"><div class="dataTables_filter" id="editable-sample_filter"><label>Busca: <input type="text" aria-controls="editable-sample" class="medium"></label></div></div></div><table class="table table-striped table-hover table-bordered dataTable" id="editable-sample" aria-describedby="editable-sample_info">
+                                     <thead>
+                                     <tr role="row"><th class="sorting" role="columnheader" rowspan="1" colspan="1" aria-label="Username" style="width: 287px;">Nome</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="editable-sample" rowspan="1" colspan="1" style="width: 127px;">Idade</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="editable-sample" rowspan="1" colspan="1" aria-label="Full Name: activate to sort column ascending" style="width: 191px;">Empresa</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="editable-sample" rowspan="1" colspan="1" style="width: 184px;">Cargo</th><th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="editable-sample" rowspan="1" colspan="1" style="width: 89px;">Editar</th><th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="editable-sample" rowspan="1" colspan="1" style="width: 133px;">Excluir</th></tr>
+                                     </thead>
+                                     
+                                 <tbody role="alert" aria-live="polite" aria-relevant="all">
+                                    {% for pessoa in pessoas %}
+                                    <tr class="odd">
+                                         <td class=" sorting_1">{{pessoa.nome_pessoa}}</td>
+                                         <td class=" "> {{pessoa.idade}}</td>
+                                         <td class=" ">{{pessoa.empresa}}</td>
+                                         <td class="center ">{{pessoa.cargo}}</td>
+                                         <td class=" "><a class="edit" href="/editar_pessoa/{{pessoa.id}}">Editar</a></td>
+                                         <td class=" "><a class="delete" href="/excluir_pessoa/{{pessoa.id}}" OnClick="return confirm('Tem certeza de que deseja excluir este cadastro? \nEssa ação não pode ser desfeita.')">Excluir</a></td>
+                                     </tr>
+                                     {% endfor %}
+                                     </tr></tbody></table><div class="row-fluid"><div class="span6"><div class="dataTables_info" id="editable-sample_info">Showing 1 to 5 of 12 entries</div></div><div class="span6"><div class="dataTables_paginate paging_bootstrap pagination"><ul><li class="prev disabled"><a href="#">← Prev</a></li><li class="active"><a href="#">1</a></li><li><a href="#">2</a></li><li><a href="#">3</a></li><li class="next"><a href="#">Next → </a></li></ul></div></div></div></div>
+                             </div>
+                         </div>
+                     </div>
+
+{% endblock content %}

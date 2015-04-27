@@ -1,0 +1,91 @@
+QuerySet:
+
+É uma coleção de objetos do banco de dados. Em termos SQL, um QuerySet equipara-se a uma consulta SELECT, 
+e um filtro é uma cláusula limitadora como WHERE ou LIMIT.
+Você obtem um QuerySet usando o Manager de seu model. Cada model tem pelo menos um Manager,
+e ele é chamado objects por padrão.
+Usamos o QuerySet para receber os objetos do banco de dados:
+
+query = Pessoa.objects //Pessoa é uma classe  
+
+query agora é o QuerySet inicial que contém todos os objetos do Blog no banco de dados.
+
+Lista útil de métodos da QuerySet:
+
+all()
+
+Retorna todos os objetos da QuerySet.
+
+count()
+
+Retorna o total de objetos da QuerySet.
+
+create(**kwargs)
+
+Cria um objeto e salva no banco de dados, com os valores dos parâmetros informados.
+
+dates(field, kind, order='ASC')
+
+Retorna os objetos da QuerySet agrupados por data.
+
+distinct()
+
+Retorna os objetos da QuerySet aplicando filtro para evitar duplicações.
+
+exclude(**kwargs)
+
+Aplica filtro negativo à QuerySet. Isso quer dizer que os objetos que combinarem com os parâmetros informados não serão retornados na QuerySet.
+
+extra(select=None, where=None, params=None, tables=None, order_by=None, select_params=None)
+
+Aplica regras avançadas à QuerySet, como sub-selects, campos calculados, condições especiais, tabelas adicionais e ordenação por campos calculados.
+
+filter(**kwargs)
+
+Aplica filtro afirmativo à QuerySet. Isso quer dizer que somente os objetos que combinarem com os parâmetros informados serão retornados na QuerySet.
+
+get(**kwargs)
+
+Retorna um único objeto que obedeça aos parâmetros informados. Caso seja encontrado mais de um objeto, uma exceção do tipo MultipleObjectsReturned é levantada. Por outro lado, se nenhum objeto for encontrado, uma exceção do tipo DoesNotExist é levantada.
+
+get_or_create(**kwargs)
+
+Verifica se já existe um objeto que case com os parâmetros informados, se não houver, o objeto é criado.
+
+in_bulk(id_list)
+
+Retorna os objetos da QuerySet em um dicionário onde a chave é seu id.
+
+iterator()
+
+Retorna um iterador para os objetos a QuerySet. Útil para QuerySets que retornam uma grande quantidade de objetos.
+
+latest(field_name=None)
+
+Retorna o último objeto de acordo com o campo definido pelo parâmetro ou pelo atributo get_latest_by da classe Meta da classe de modelo.
+
+none()
+
+Retorna uma QuerySet vazia ( EmptyQuerySet ).
+
+order_by(*fields)
+
+Ordena a QuerySet por um ou mais campos.
+
+reverse()
+
+Inverte a ordenação da QuerySet.
+
+select_related()
+
+Retorna não só os objetos da QuerySet, mas também seus objetos relacionados.
+
+values(*fields)
+
+Retorna uma tupla com os valores dos campos informados agrupados em dicionários. Útil para situações onde se deseja capturar do banco de dados os valores de alguns campos específicos e ganhar em performance.
+
+values_list(*fields)
+
+Semente ao método "values", mas ao invés da tupla ser composta por dicionários, ela é composta por outras tuplas.
+
+

@@ -1,0 +1,31 @@
+Documentação Custom Lookup Django 1.7
+
+Primeiramente devemos saber o que é um Custom Lookup e para que ele serve.
+
+O Custom Lookup é uma ferramenta do Django que permite filtrar, de inúmeras formas, o banco de dados, por meio dos QuerySets que são coleções de objetos no banco de dados. Mais detalhes sobre QuerySets em sua documentação.
+
+Essa ferramenta será bastante utilizada para podermos tornar o SI mais eficiente, mais rápido, uma vez que ela seleciona parte do banco de dados para ser analisada ao invés de utilizar todo ele como era feito.
+
+Depois de um brevíssimo resumo, está na hora de saber como usar tal ferramenta.
+
+Primeiramente vamos entender como se usa um lookup já pronto, por exemplo o “exact”.
+
+Quando queremos filtrar um objeto, por exemplo, uma pessoa, pelo nome, utilizamos:
+
+“[…].objects.filter(nome=‘João’)”
+
+Está implícito, como padrão, que o Django irá buscar todos os nomes que estão escritos da mesma maneira como foi colocado, o “J” com letra maiúscula, e o “ã” com o tio.
+
+Ou seja, de uma forma completa, esse código estaria escrito dessa forma:
+
+“[…].objects.filter(nome__exact=‘João’)”
+
+Isso equivale a um código padrão do tipo:
+
+“[…].objects.filter(campo__tipodolookup=‘valorcomparado’)”
+
+São utilizados dois “underlines” para denominar o tipo do lookup que será utilizado.
+
+Outro lookup que já está pronto e também é muito utilizado é o “iexact”. Ele ignora as letras maiúsculas e minúsculas, tornando mais ampla a busca.
+
+Agora, finalmente, para criar o próprio lookup (Estou enrolado nessa parte, ja li vários tutoriais mas ainda não consigo entender como eu poderia “criar” um filtro novo, acredito que só de pra criar algumas funcionalidades já existentes, ou entao juntar duas em uma só, mas ainda to pesquisando)
